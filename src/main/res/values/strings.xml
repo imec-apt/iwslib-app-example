@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">imec Wearable Streaming library example app</string>
+    <string name="deviceType">Select device type:</string>
+    <string name="chillband">Chillband</string>
+    <string name="stingray">Stingray</string>
+    <string name="findAndStream">Find device &amp; Start stream</string>
+    <string name="stopSteam">Stop stream</string>
+    <string name="scanning_for">Scanning for %1$s. Please tap on the device to make it discoverable.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="streamConfirmation">Found Bluetooth device \"%1$s\" (MAC: %2$s). Is this the %3$s you intend to stream from?</string>
+    <string name="alsoEndDataCollection">Do you also which to end on-device data collection?</string>
+    <string name="status">Currently %1$s; Received %2$d readings; Battery level %3$d%%.</string>
+    <string name="connected">connected</string>
+    <string name="disconnected">disconnected</string>
+</resources>

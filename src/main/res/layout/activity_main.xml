@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteX="8dp"
+    tools:layout_editor_absoluteY="8dp">
+
+    <TextView
+        android:id="@+id/lblDetectTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/deviceType"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+
+    <RadioGroup
+        android:id="@+id/radioGrpDeviceType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/radioChillband"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chillband"/>
+
+        <RadioButton
+            android:id="@+id/radioStingray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stingray" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/findAndStream"/>
+
+    <TextView
+        android:id="@+id/txtStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
