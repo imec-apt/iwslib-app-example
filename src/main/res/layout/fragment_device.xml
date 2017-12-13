@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="locale"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/lblMac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewEnd"
+        android:labelFor="@id/txtMac"/>
+
+    <EditText
+        android:id="@+id/txtMac"
+        android:inputType="textCapCharacters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
+        android:padding="4dp"/>
+
+    <RadioGroup
+        android:id="@+id/radioGrpDeviceType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <RadioButton
+            android:id="@+id/radioChillband"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chillband_short"/>
+
+        <RadioButton
+            android:id="@+id/radioStingray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stingray_short" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/lblConnectionState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/na"
+        android:padding="4dp"/>
+
+    <TextView
+        android:id="@+id/lblReadingsCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/na"
+        android:padding="4dp"/>
+
+</TableRow>

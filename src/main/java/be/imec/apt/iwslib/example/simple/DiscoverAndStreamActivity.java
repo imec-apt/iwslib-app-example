@@ -1,4 +1,4 @@
-package be.imec.apt.iwslib.example;
+package be.imec.apt.iwslib.example.simple;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothSocket;
@@ -19,6 +19,10 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import be.imec.apt.iwslib.example.ChillbandClient;
+import be.imec.apt.iwslib.example.DeviceClient;
+import be.imec.apt.iwslib.example.R;
+import be.imec.apt.iwslib.example.StingrayClient;
 import be.imec.apt.iwslib.shared.xmp.XmpDiscoverer;
 import be.imec.apt.iwslib.shared.xmp.api.XmpDiscoveryApi;
 import butterknife.BindView;
@@ -27,19 +31,11 @@ import butterknife.ButterKnife;
 /**
  * Minimalistic example to demonstrate the use of the IWS (imec Wearable Streaming) library.
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, XmpDiscoveryApi {
+public class DiscoverAndStreamActivity extends AppCompatActivity implements View.OnClickListener, XmpDiscoveryApi {
 
 	static private final @IdRes int DEFAULT_DEVICE_TYPE_RADIO_ID = R.id.radioChillband;
 
-	static private DeviceClient GetDeviceClient(@IdRes int selectionDeviceTypeRadioButtonId) {
-		switch(selectionDeviceTypeRadioButtonId) {
-			case R.id.radioStingray : return new StingrayClient();
-			case R.id.radioChillband : return new ChillbandClient();
-		}
-		return null;
-	}
-
-	@BindView(R.id.button)
+	@BindView(R.id.btn_discover_and_stream)
 	Button button;
 
 	@BindView(DEFAULT_DEVICE_TYPE_RADIO_ID)
@@ -53,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	private ProgressDialog scanDialog;
 
-	private DeviceClient<?> deviceClient = GetDeviceClient(DEFAULT_DEVICE_TYPE_RADIO_ID);
+	private DeviceClient deviceClient;
 
 	private Timer statusTimer = new Timer();
 
@@ -61,22 +57,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_main);
+		setTitle(R.string.simple_activity_name);
+		setContentView(R.layout.activity_discover_and_stream);
 		ButterKnife.bind(this);
-
-		// Select the default:
-		radioButtonDefaultType.setChecked(true);
 
 		// Switching between device types:
 		radioGrpDeviceType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				deviceClient = GetDeviceClient(checkedId);
+				deviceClient = getDeviceClient(checkedId);
 			}
 		});
 
+		// Select the default:
+		radioButtonDefaultType.setChecked(true);
+
 		// Button logic:
 		button.setOnClickListener(this);
+	}
+
+	private DeviceClient getDeviceClient(@IdRes int selectionDeviceTypeRadioButtonId) {
+		switch(selectionDeviceTypeRadioButtonId) {
+			case R.id.radioStingray : return new StingrayClient(getString(R.string.stingray));
+			case R.id.radioChillband : return new ChillbandClient(getString(R.string.chillband));
+		}
+		return null;
 	}
 
 	@Override
@@ -84,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		if(!deviceClient.isStreaming()) {
 			// Detect device:
 			final XmpDiscoverer discoverer = new XmpDiscoverer();
-			scanDialog = ProgressDialog.show(MainActivity.this, getString(R.string.app_name), getString(R.string.scanning_for, getString(deviceClient.getDeviceTypeStringRes())));
+			scanDialog = ProgressDialog.show(DiscoverAndStreamActivity.this, getString(R.string.app_name), getString(R.string.scanning_for, getString(deviceClient.getDeviceTypeStringRes())));
 			scanDialog.setCancelable(true);
 			scanDialog.setCanceledOnTouchOutside(false);
 			scanDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -98,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			discoverer.searchDevice(this);
 		}
 		else {
-			// Stop stream:
+			// Stop startStream:
 			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -106,11 +111,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 					txtStatus.setText("");
 					deviceClient.stopStream(which == DialogInterface.BUTTON_POSITIVE);
 					radioGrpDeviceType.setEnabled(true);
-					button.setText(R.string.findAndStream);
+					button.setText(R.string.find_and_stream);
 				}
 			};
-			new AlertDialog.Builder(MainActivity.this)
-					.setMessage(R.string.alsoEndDataCollection)
+			new AlertDialog.Builder(DiscoverAndStreamActivity.this)
+					.setMessage(R.string.also_end_data_collection)
 					.setPositiveButton(R.string.yes, dialogClickListener)
 					.setNegativeButton(R.string.no, dialogClickListener)
 					.show();
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	@Override
 	public void didFail(@Nullable Exception e) {
-		Log.e(MainActivity.class.getSimpleName(),"Device detection failed", e);
+		Log.e(DiscoverAndStreamActivity.class.getSimpleName(),"Device detection failed", e);
 		// TODO cancel dialog & discovery
 	}
 
@@ -128,14 +133,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				new AlertDialog.Builder(MainActivity.this)
-						.setMessage(getString(R.string.streamConfirmation, name, address, getString(deviceClient.getDeviceTypeStringRes())))
+				new AlertDialog.Builder(DiscoverAndStreamActivity.this)
+						.setMessage(getString(R.string.stream_confirmation, name, address, getString(deviceClient.getDeviceTypeStringRes())))
 						.setPositiveButton(R.string.yes,
 								new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
 										scanDialog.cancel();
-										button.setText(R.string.stopSteam);
+										button.setText(R.string.stop_stream);
 										deviceClient.startStream(btSocket);
 										statusTimer.scheduleAtFixedRate(new TimerTask() {
 											@Override
@@ -143,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 												runOnUiThread(new Runnable() {
 													@Override
 													public void run() {
-														txtStatus.setText(getString(R.string.status, getString(deviceClient.isConnected() ? R.string.connected : R.string.disconnected), deviceClient.getNumberOfReadings(), deviceClient.getBatteryLevel()));
+														txtStatus.setText(getString(R.string.status_msg, getString(deviceClient.isConnected() ? R.string.connected : R.string.disconnected), deviceClient.getNumberOfReadings(), deviceClient.getBatteryLevel()));
 													}
 												});
 											}

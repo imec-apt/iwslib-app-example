@@ -6,11 +6,26 @@ import android.util.Log;
 
 import be.imec.apt.iwslib.chillband.ChillbandDevice;
 import be.imec.apt.iwslib.chillband.api.ChillbandStreamApi;
+import be.imec.apt.iwslib.shared.xmp.XmpConnectionServer;
 
-public class ChillbandClient extends DeviceClient<ChillbandDevice> implements ChillbandStreamApi {
+public class ChillbandClient extends DeviceClient<ChillbandDevice, ChillbandClient> implements ChillbandStreamApi {
+
+	public ChillbandClient(String label) {
+		super(label);
+	}
+
+	public ChillbandClient(String label, XmpConnectionServer connectionServer) {
+		super(label, connectionServer);
+	}
+
 	@Override
 	protected ChillbandDevice createDevice(@NonNull BluetoothSocket btSocket) {
 		return new ChillbandDevice(btSocket);
+	}
+
+	@Override
+	protected ChillbandDevice createDevice(@NonNull String macAddress) {
+		return new ChillbandDevice(macAddress);
 	}
 
 	@Override
@@ -35,7 +50,7 @@ public class ChillbandClient extends DeviceClient<ChillbandDevice> implements Ch
 
 	@Override
 	public void didReceiveGsr(@NonNull ChillbandDevice device, double gsr, long timestamp) {
-		numberOfReadings++;
+		countReading();
 	}
 
 	@Override
@@ -45,6 +60,6 @@ public class ChillbandClient extends DeviceClient<ChillbandDevice> implements Ch
 
 	@Override
 	public void didReceiveTemperature(@NonNull ChillbandDevice device, double temperature, long timestamp) {
-		numberOfReadings++;
+		countReading();
 	}
 }

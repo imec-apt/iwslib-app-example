@@ -4,22 +4,22 @@ buildscript {
 		google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
 
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.2"
 
     defaultConfig {
         applicationId "be.imec.apt.iwslib.example"
         minSdkVersion 23
-        targetSdkVersion 26
-        versionCode 1
-        versionName "0.9"
+        targetSdkVersion 27
+        versionCode 2
+        versionName "0.92"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -33,7 +33,7 @@ android {
 }
 
 repositories {
-    maven { url "https://arti.imec-apt.be/artifactory/gradle-dev-local" } // Note this may change soon
+    maven { url "https://arti.imec-apt.be/artifactory/libs-release" }
     google()
     jcenter()
 }
@@ -41,11 +41,12 @@ repositories {
 dependencies {
     //compile fileTree(dir: 'libs', include: ['*.jar'])
     //compile project(':iwslib')
-    compile 'be.imec.apt:iwslib:0.96' // <-- the imec Wearable Streaming Library for Android! (fetched from the arti.imec-apt.be repository defined above)
+    compile 'be.imec.apt:iwslib:0.99.1' // <-- the imec Wearable Streaming Library for Android! (fetched from the arti.imec-apt.be repository defined above)
 
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'net.danlew:android.joda:2.9.9.1'
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
