@@ -49,7 +49,7 @@ public class ChillbandClient extends DeviceClient<ChillbandDevice, ChillbandClie
 	}
 
 	@Override
-	public void didReceiveGsr(@NonNull ChillbandDevice device, double gsr, long timestamp) {
+	public void didReceiveGsr(final @NonNull ChillbandDevice device, final double gsr, final double gsr1uS, final double gsr20uS, final long timestamp) {
 		countReading();
 	}
 

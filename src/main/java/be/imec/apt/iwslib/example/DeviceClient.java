@@ -57,7 +57,7 @@ public abstract class DeviceClient<XD extends XmpDevice, DC extends DeviceClient
 	}
 
 	@Override
-	public void didDisconnect(@NonNull XD device, final int number) {
+	public void didDisconnect(@NonNull XD device, final int connectionNumber, final boolean endingSession) {
 		connected = false;
 		Log.i(getClass().getSimpleName(), label + ": disconnected");
 		if(observer != null)
